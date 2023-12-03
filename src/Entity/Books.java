@@ -7,12 +7,19 @@ public class Books {
     private int stock;
     private int price;
 
-    public Books(int book_id, String title, String genre, int stock, int price) {
+    private Authors author;
+    private Customer customer;
+    private Orders order;
+
+    public Books(int book_id, String title, String genre, int stock, int price, Authors author, Customer customer, Orders order) {
         this.book_id = book_id;
         this.title = title;
         this.genre = genre;
         this.stock = stock;
         this.price = price;
+        this.author = author;
+        this.customer = customer;
+        this.order = order;
     }
 
     public int getBook_id() {
@@ -54,8 +61,33 @@ public class Books {
     public void setPrice(int price) {
         this.price = price;
     }
+
+    public Authors getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Authors author) {
+        this.author = author;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Orders getOrders() {
+        return order;
+    }
+
+    public void setOrders(Orders orders) {
+        this.order = orders;
+    }
     @Override
     public String toString() {
-        return "Books{" + "book_id=" + book_id + ", title='" + title + '\'' + ", genre='" + genre + '\'' + ", stock=" + stock + ", price=" + price + '}';
+        return "Books{" + "book_id=" + book_id + ", title='" + title + '\'' + ", genre='" + genre + '\'' + ", price=" + price +
+                ", stock=" + stock + ", author=" + author + ", customer=" + customer + ", orders=" + order + '}';
     }
 }
