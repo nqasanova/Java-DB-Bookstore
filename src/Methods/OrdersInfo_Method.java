@@ -3,6 +3,7 @@ package src.Methods;
 import src.Entity.Books;
 import src.Entity.OrdersInfo;
 import src.Connectivity.Database_Connection;
+import src.Entity.OrdersInfo;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,7 +15,7 @@ import java.util.List;
 public class OrdersInfo_Method extends Database_Connection {
     public static boolean addOrderInformation(OrdersInfo OrderInformation) {
         try (Connection connection = connect();
-             PreparedStatement insertOrderStatement = connection.prepareStatement("INSERT INTO ordersinfo (order_id, book_id,orderedbooks) VALUES (?, ?, ?)");
+             PreparedStatement insertOrderStatement = connection.prepareStatement("INSERT INTO ordersInfo (order_id, book_id,ordered_books) VALUES (?, ?, ?)");
              PreparedStatement updateBookStatement = connection.prepareStatement("UPDATE books SET stock = ? WHERE book_id = ?")) {
 
             connection.setAutoCommit(false);
@@ -55,14 +56,14 @@ public class OrdersInfo_Method extends Database_Connection {
         List<OrdersInfo> OrderInformation = new ArrayList<>();
         try (Connection connection = connect()) {
             Statement st = connection.createStatement();
-            st.execute("SELECT * FROM ordersinfo");
+            st.execute("SELECT * FROM ordersInfo");
             ResultSet res = st.getResultSet();
             while (res.next()) {
                 int order_id = res.getInt("order_id");
                 int book_id = res.getInt("book_id");
-                int orderedbooks = res.getInt("orderedbooks");
-                System.out.println("order_id = " + order_id + ", book_id = " + book_id + ", orderedbooks = " + orderedbooks);
-                OrderInformation.add(new OrdersInfo(order_id, book_id, orderedbooks));
+                int ordered_books = res.getInt("ordered_books");
+                System.out.println("order_id = " + order_id + ", book_id = " + book_id + ", ordered_books = " + ordered_books);
+                OrderInformation.add(new OrdersInfo(order_id, book_id, ordered_books));
             }
         } catch (Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
@@ -72,7 +73,7 @@ public class OrdersInfo_Method extends Database_Connection {
 
     public static boolean updateOrderInformation(OrdersInfo OrderInformation) {
         try (Connection connection = connect()) {
-            PreparedStatement st = connection.prepareStatement("UPDATE ordersinfo SET book_id=?, orderedbooks=? WHERE order_id=?");
+            PreparedStatement st = connection.prepareStatement("UPDATE ordersInfo SET book_id=?, ordered_books=? WHERE order_id=?");
             st.setInt(1, OrderInformation.getBook_id());
             st.setInt(3, OrderInformation.getOrder_id());
             st.setInt(2, OrderInformation.getOrdered_books());
@@ -87,12 +88,12 @@ public class OrdersInfo_Method extends Database_Connection {
     public static boolean deleteOrderInformation(int order_id, int book_id) {
         try (Connection connection = connect()) {
             Statement st = connection.createStatement();
-            st.execute("DELETE FROM ordersinfo WHERE order_id = " + order_id + " AND book_id = " + book_id);
+            st.execute("DELETE FROM ordersInfo WHERE order_id = " + order_id + " AND book_id = " + book_id);
         } catch (Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
             return false;
         }
-        System.out.println("Successfully deleted ordersinfo");
+        System.out.println("Successfully deleted ordersInfo");
         return true;
     }
 
@@ -100,14 +101,14 @@ public class OrdersInfo_Method extends Database_Connection {
         List<OrdersInfo> orderInformation = new ArrayList<>();
         try (Connection connection = connect()) {
             Statement st = connection.createStatement();
-            st.execute("SELECT * FROM ordersinfo WHERE order_id = " + order_id);
+            st.execute("SELECT * FROM ordersInfo WHERE order_id = " + order_id);
             ResultSet res = st.getResultSet();
             while (res.next()) {
                 int id = res.getInt("order_id");
                 int book_id = res.getInt("book_id");
-                int orderedbooks = res.getInt("orderedbooks");
-                System.out.println("order_id = " + order_id + ", book_id = " + book_id + ", orderedbooks = " + orderedbooks);
-                orderInformation.add(new OrdersInfo(id, book_id, orderedbooks));
+                int ordered_books = res.getInt("ordered_books");
+                System.out.println("order_id = " + order_id + ", book_id = " + book_id + ", ordered_books = " + ordered_books);
+                orderInformation.add(new OrdersInfo(id, book_id, ordered_books));
             }
         } catch (Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
@@ -115,19 +116,18 @@ public class OrdersInfo_Method extends Database_Connection {
         return orderInformation;
     }
 
-
     public static OrdersInfo getOrderInformationByOrderIdAndBookId(int order_id, int book_id) {
         OrdersInfo orderInformation = null;
         try (Connection connection = connect()) {
             Statement st = connection.createStatement();
-            st.execute("SELECT * FROM ordersinfo WHERE order_id = " + order_id + " AND book_id = " + book_id);
+            st.execute("SELECT * FROM ordersInfo WHERE order_id = " + order_id + " AND book_id = " + book_id);
             ResultSet res = st.getResultSet();
             while (res.next()) {
                 int id = res.getInt("order_id");
                 int get_book_id = res.getInt("book_id");
-                int orderedbooks = res.getInt("orderedbooks");
-                System.out.println("order_id = " + order_id + ", book_id = " + get_book_id + ", orderedbooks = " + orderedbooks);
-                orderInformation = new OrdersInfo(id, get_book_id, orderedbooks);
+                int ordered_books = res.getInt("ordered_books");
+                System.out.println("order_id = " + order_id + ", book_id = " + get_book_id + ", ordered_books = " + ordered_books);
+                orderInformation = new OrdersInfo(id, get_book_id, ordered_books);
             }
         } catch (Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
