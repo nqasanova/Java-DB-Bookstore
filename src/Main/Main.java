@@ -1,5 +1,4 @@
 package src.Main;
-
 import src.Entity.*;
 import src.Methods.*;
 import src.Metadata.Metadata;
@@ -11,11 +10,9 @@ import java.util.Scanner;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
-
     public static void main(String[] args) {
         mainMenu();
     }
-
     public static void mainMenu() {
         System.out.println("Main Menu");
         while (true) {
@@ -25,32 +22,20 @@ public class Main {
                     2.authors table
                     3.customers table
                     4.orders table
-                    5.booksinfo table
-                    6.ordersinfo table
+                    5.booksInfo table
+                    6.ordersInfo table
                     7.Retrieve All Table names and Columns
                     8.Retrieve Column data types
                     9.Retrieve Primary keys
                     10.Retrieve Foreign keys
                     11.Exit from application""");
             int option = sc.nextInt();
-            if (option == 1) {
-                bookMenu();
-            }
-            if (option == 2) {
-                authorMenu();
-            }
-            if (option == 3) {
-                customerMenu();
-            }
-            if (option == 4) {
-                orderMenu();
-            }
-            if (option == 5) {
-                bookInformationMenu();
-            }
-            if (option == 6) {
-                orderInformationMenu();
-            }
+            if (option == 1) { bookMenu(); }
+            if (option == 2) {authorMenu(); }
+            if (option == 3) { customerMenu(); }
+            if (option == 4) { orderMenu(); }
+            if (option == 5) { bookInformationMenu(); }
+            if (option == 6) { orderInformationMenu(); }
             if (option == 7) {
                 try {
                     Metadata.printTableNamesandColumns();
@@ -88,7 +73,6 @@ public class Main {
             }
         }
     }
-
     public static void bookMenu() {
         System.out.println("""
                 Books table
@@ -180,7 +164,6 @@ public class Main {
             mainMenu();
         }
     }
-
     public static void authorMenu() {
         System.out.println("""
                 Authors table
@@ -245,15 +228,13 @@ public class Main {
             Authors_Method.deleteAuthors(author_id);
             authorMenu();
         }
-
         if (choice == 6) {
             mainMenu();
         }
     }
-
     public static void bookInformationMenu() {
         System.out.println("""
-                booksinfo table
+                booksInfo table
                 1.Insert new book information
                 2.Retrieve all book information
                 3.Get all book information by book_id
@@ -317,12 +298,10 @@ public class Main {
             BooksInfo_Method.deleteBooksInformation(book_id, author_id);
             bookInformationMenu();
         }
-
         if (choice == 6) {
             mainMenu();
         }
     }
-
     public static void customerMenu() {
         System.out.println("""
                 Customers table
@@ -345,7 +324,7 @@ public class Main {
             String address = sc.nextLine();
             System.out.print("customer email: ");
             String email = sc.nextLine();
-            Customer_Method.addCustomer(new Customer(customer_id, customer_name, address, email));
+            Customer_Method.addCustomer(new Customer(customer_id, customer_name, email, address));
             customerMenu();
         }
         if (choice == 2) {
@@ -376,13 +355,13 @@ public class Main {
             System.out.println("Enter new values to fields you want to update");
             System.out.print("New customer_name: ");
             String customer_name = sc.nextLine();
-            System.out.print("New address: ");
-            String address = sc.nextLine();
             System.out.print("New email: ");
             String email = sc.nextLine();
+            System.out.print("New address: ");
+            String address = sc.nextLine();
             customer.setCustomer_name(customer_name);
-            customer.setAddress(address);
             customer.setEmail(email);
+            customer.setAddress(address);
             Customer_Method.updateCustomer(customer);
             customerMenu();
         }
@@ -402,10 +381,9 @@ public class Main {
             mainMenu();
         }
     }
-
     public static void orderInformationMenu() {
         System.out.println("""
-                ordersinfo table
+                ordersInfo table
                 1.Insert new order information
                 2.Retrieve all order information
                 3.Get all order information by order_id
@@ -475,12 +453,10 @@ public class Main {
             OrdersInfo_Method.deleteOrderInformation(order_id, book_id);
             orderInformationMenu();
         }
-
         if (choice == 6) {
             mainMenu();
         }
     }
-
     public static void orderMenu() {
         System.out.println("""
                 Orders table
@@ -558,12 +534,10 @@ public class Main {
             Orders_Method.deleteOrders(order_id);
             orderMenu();
         }
-
         if (choice == 6) {
             mainMenu();
         }
     }
-
     public static void exitApplication() {
         System.exit(0);
     }
