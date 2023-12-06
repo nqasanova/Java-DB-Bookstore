@@ -15,7 +15,7 @@ import java.util.List;
 public class BooksInfo_Method extends Database_Connection {
     public static boolean addBooksInformation(BooksInfo BooksInformation) {
         try (Connection connection = connect();) {
-            PreparedStatement st = connection.prepareStatement("INSERT INTO booksinfo (book_id,author_id) VALUES (?,?)");
+            PreparedStatement st = connection.prepareStatement("INSERT INTO booksInfo (book_id,author_id) VALUES (?,?)");
             st.setInt(1, BooksInformation.getBook_id());
             st.setInt(2, BooksInformation.getAuthor_id());
             System.out.println("Inserting Book Information");
@@ -32,7 +32,7 @@ public class BooksInfo_Method extends Database_Connection {
         List<BooksInfo> BooksInformation = new ArrayList<>();
         try (Connection connection = connect()) {
             Statement st = connection.createStatement();
-            st.execute("SELECT * FROM booksinfo");
+            st.execute("SELECT * FROM booksInfo");
             ResultSet res = st.getResultSet();
             while (res.next()) {
                 int book_id = res.getInt("book_id");
@@ -48,7 +48,7 @@ public class BooksInfo_Method extends Database_Connection {
 
     public static boolean updateBooksInformation(BooksInfo BooksInformation) {
         try (Connection connection = connect()) {
-            PreparedStatement st = connection.prepareStatement("UPDATE booksinfo SET author_id=? WHERE book_id=?");
+            PreparedStatement st = connection.prepareStatement("UPDATE booksInfo SET author_id=? WHERE book_id=?");
             st.setInt(1, BooksInformation.getAuthor_id());
             st.setInt(2, BooksInformation.getBook_id());
             System.out.println("Updated successfully");
@@ -63,7 +63,7 @@ public class BooksInfo_Method extends Database_Connection {
     public static boolean deleteBooksInformation(int book_id, int author_id) {
         try (Connection connection = connect()) {
             Statement st = connection.createStatement();
-            st.execute("DELETE FROM booksinfo WHERE book_id = " + book_id + " AND author_id = " + author_id);
+            st.execute("DELETE FROM booksInfo WHERE book_id = " + book_id + " AND author_id = " + author_id);
         } catch (Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
             return false;
@@ -76,7 +76,7 @@ public class BooksInfo_Method extends Database_Connection {
         List<BooksInfo> booksInformation = new ArrayList<>();
         try (Connection connection = connect()) {
             Statement st = connection.createStatement();
-            st.execute("SELECT * FROM booksinfo WHERE book_id = " + book_id);
+            st.execute("SELECT * FROM booksInfo WHERE book_id = " + book_id);
             ResultSet res = st.getResultSet();
             while (res.next()) {
                 int id = res.getInt("book_id");
@@ -94,7 +94,7 @@ public class BooksInfo_Method extends Database_Connection {
         BooksInfo booksInformation = null;
         try (Connection connection = connect()) {
             Statement st = connection.createStatement();
-            st.execute("SELECT * FROM booksinfo WHERE book_id = " + book_id + " AND author_id = " + author_id);
+            st.execute("SELECT * FROM booksInfo WHERE book_id = " + book_id + " AND author_id = " + author_id);
             ResultSet res = st.getResultSet();
             while (res.next()) {
                 int id = res.getInt("book_id");

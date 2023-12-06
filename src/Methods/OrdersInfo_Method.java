@@ -75,8 +75,8 @@ public class OrdersInfo_Method extends Database_Connection {
         try (Connection connection = connect()) {
             PreparedStatement st = connection.prepareStatement("UPDATE ordersInfo SET book_id=?, ordered_books=? WHERE order_id=?");
             st.setInt(1, OrderInformation.getBook_id());
-            st.setInt(3, OrderInformation.getOrder_id());
-            st.setInt(2, OrderInformation.getOrdered_books());
+            st.setInt(2, OrderInformation.getOrder_id());
+            st.setInt(3, OrderInformation.getOrdered_books());
             System.out.println("Updated successfully");
             st.execute();
         } catch (Exception e) {

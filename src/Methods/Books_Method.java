@@ -112,8 +112,8 @@ public class Books_Method extends Database_Connection {
         List<Books> books = new ArrayList<>();
         try (Connection connection = connect()) {
             Statement st = connection.createStatement();
-            st.execute("SELECT * FROM ((((books NATURAL JOIN booksinfo) JOIN authors USING(author_id))\n" +
-                    " JOIN orderinformation USING(book_id)) JOIN orders USING(order_id)) JOIN customer USING(customer_id) ORDER BY book_id");
+            st.execute("SELECT * FROM ((((books NATURAL JOIN booksInfo) JOIN authors USING(author_id))\n" +
+                    " JOIN ordersInfo USING(book_id)) JOIN orders USING(order_id)) JOIN customer USING(customer_id) ORDER BY book_id");
             ResultSet res = st.getResultSet();
             while (res.next()) {
                 int book_id = res.getInt("book_id");
@@ -130,11 +130,11 @@ public class Books_Method extends Database_Connection {
                 String email = res.getString("email");
                 String author_name = res.getString("author_name");
                 int author_id = res.getInt("author_id");
-                int orderedbooks = res.getInt("orderedbooks");
+                int ordered_books = res.getInt("ordered_books");
 
                 System.out.println("customer_id = " + customer_id + ", order_id = " + order_id + ", book_id = " + book_id
                         + ", author_id = " + author_id + ", title = " + title + ", genre = " + genre + ", price = " + price + ", stock = " + stock
-                        + ", author_name = " + author_name + "orderedbooks = " + orderedbooks
+                        + ", author_name = " + author_name + "ordered_books = " + ordered_books
                         + ", order_date = " + order_date + ", total_price = " + total_price +
                         " address = " + address + ", email = " + email +  ", customer_name = " + customer_name);
                 Authors author = new Authors(author_id,author_name);

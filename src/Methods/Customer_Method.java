@@ -14,11 +14,11 @@ import java.util.List;
 public class Customer_Method extends Database_Connection {
     public static boolean addCustomer(Customer Customer) {
         try (Connection connection = connect();) {
-            PreparedStatement st = connection.prepareStatement("INSERT INTO customer (customer_id,customer_name,address,email) VALUES (?,?,?,?)");
+            PreparedStatement st = connection.prepareStatement("INSERT INTO customer (customer_id,customer_name,email,address) VALUES (?,?,?,?)");
             st.setInt(1, Customer.getCustomer_id());
             st.setString(2, Customer.getCustomer_name());
-            st.setString(3, Customer.getAddress());
-            st.setString(4, Customer.getEmail());
+            st.setString(3, Customer.getEmail());
+            st.setString(4, Customer.getAddress());
             System.out.println("Inserting Customer");
             st.execute();
         } catch (Exception e) {
