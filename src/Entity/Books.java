@@ -22,6 +22,38 @@ public class Books {
         this.order = order;
     }
 
+    public Authors getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Authors author) {
+        this.author = author;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Orders getOrders() {
+        return order;
+    }
+
+    public void setOrders(Orders orders) {
+        this.order = orders;
+    }
+
+    public Books(int book_id, String title, String genre, int price, int stock) {
+        this.book_id = book_id;
+        this.title = title;
+        this.genre = genre;
+        this.price = price;
+        this.stock = stock;
+    }
+
     public int getBook_id() {
         return book_id;
     }
@@ -62,29 +94,6 @@ public class Books {
         this.price = price;
     }
 
-    public Authors getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Authors author) {
-        this.author = author;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Orders getOrders() {
-        return order;
-    }
-
-    public void setOrders(Orders orders) {
-        this.order = orders;
-    }
     @Override
     public String toString() {
         return "Books{" + "book_id=" + book_id + ", title='" + title + '\'' + ", genre='" + genre + '\'' + ", price=" + price +
