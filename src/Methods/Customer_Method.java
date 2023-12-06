@@ -1,92 +1,100 @@
 package src.Methods;
-
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import src.Connectivity.Database_Connection;
+import src.Entity.Customer;
 
-public class Customer_Method {
+import javax.xml.crypto.Data;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
-    public static void displayTableStructure(String tableName) {
-        try (Connection connection = Database_Connection.connect()) {
-            if (connection != null) {
-                DatabaseMetaData metaData = connection.getMetaData();
 
-                // Get columns for the specified table
-                ResultSet columnResultSet = metaData.getColumns(null, null, tableName, null);
-                System.out.println("Table: " + tableName);
-                System.out.println("Columns:");
-                while (columnResultSet.next()) {
-                    String columnName = columnResultSet.getString("COLUMN_NAME");
-                    String columnType = columnResultSet.getString("TYPE_NAME");
-                    System.out.println("   " + columnName + " : " + columnType);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+public class Customer_Method extends Database_Connection {
+    public static boolean addCustomer(Customer Customer) {
+        try (Connection connection = connect();) {
+            PreparedStatement st = connection.prepareStatement("INSERT INTO customer (customer_id,customer_name,address,email) VALUES (?,?,?,?)");
+            st.setInt(1, Customer.getCustomer_id());
+            st.setString(2, Customer.getCustomer_name());
+            st.setString(3, Customer.getAddress());
+            st.setString(4, Customer.getEmail());
+            System.out.println("Inserting Customer");
+            st.execute();
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+            return false;
         }
+        System.out.println("Customer inserted successfully");
+        return true;
     }
 
-    public static void displayPrimaryKeyInfo(String tableName) {
-        try (Connection connection = Database_Connection.connect()) {
-            if (connection != null) {
-                DatabaseMetaData metaData = connection.getMetaData();
-
-                // Get primary key columns for the specified table
-                ResultSet primaryKeyResultSet = metaData.getPrimaryKeys(null, null, tableName);
-                System.out.println("Table: " + tableName);
-                System.out.println("Primary Key Information:");
-                while (primaryKeyResultSet.next()) {
-                    String primaryKeyName = primaryKeyResultSet.getString("COLUMN_NAME");
-                    System.out.println("   Primary Key: " + primaryKeyName);
-                }
+    public static List<Customer> getAllCustomer() {
+        List<Customer> Customer = new ArrayList<>();
+        try (Connection connection = connect()) {
+            Statement st = connection.createStatement();
+            st.execute("SELECT * FROM customer");
+            ResultSet res = st.getResultSet();
+            while (res.next()) {
+                int customer_id = res.getInt("customer_id");
+                String customer_name = res.getString("customer_name");
+                String address = res.getString("address");
+                String email = res.getString("email");
+                System.out.println("customer_id = " + customer_id + ", customer_name = " + customer_name + ", address = " + address
+                        + ", email = " + email);
+                Customer.add(new Customer(customer_id, customer_name, address, email));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
         }
+        return Customer;
     }
 
-    public static void displayForeignKeyInfo(String tableName) {
-        try (Connection connection = Database_Connection.connect()) {
-            if (connection != null) {
-                DatabaseMetaData metaData = connection.getMetaData();
-
-                // Get foreign key columns for the specified table
-                ResultSet foreignKeyResultSet = metaData.getImportedKeys(null, null, tableName);
-
-                System.out.println("Table: " + tableName);
-                System.out.println("Foreign Key Information:");
-
-                if (foreignKeyResultSet.next()) {
-                    do {
-                        String foreignKeyName = foreignKeyResultSet.getString("FKCOLUMN_NAME");
-                        String referencedTableName = foreignKeyResultSet.getString("PKTABLE_NAME");
-                        String referencedColumnName = foreignKeyResultSet.getString("PKCOLUMN_NAME");
-                        System.out.println("   Foreign Key: " + foreignKeyName +
-                                ", Referenced Table: " + referencedTableName + ", Referenced Column: " + referencedColumnName);
-                    } while (foreignKeyResultSet.next());
-                } else {
-                    System.out.println("   No foreign keys found for the table.");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public static boolean updateCustomer(Customer Customer) {
+        try (Connection connection = connect()) {
+            PreparedStatement st = connection.prepareStatement("UPDATE customer SET customer_name=?, address=?, email=?  WHERE customer_id=?");
+            st.setString(1, Customer.getCustomer_name());
+            st.setString(2, Customer.getAddress());
+            st.setString(3, Customer.getEmail());
+            st.setInt(4, Customer.getCustomer_id());
+            System.out.println("Updated successfully");
+            st.execute();
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+            return false;
         }
+        return true;
     }
 
-    public static void main(String[] args) {
-        // Specify the table name "customer"
-        String tableName = "customer";
-
-        // Display structure of the specified table
-        displayTableStructure(tableName);
-
-        // Display primary key information for the specified table
-        displayPrimaryKeyInfo(tableName);
-
-        // Display foreign key information for the specified table
-        displayForeignKeyInfo(tableName);
+    public static boolean deleteCustomer(int customer_id) {
+        try (Connection connection = connect()) {
+            Statement st = connection.createStatement();
+            st.execute("DELETE FROM Customer WHERE customer_id = " + customer_id);
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+            return false;
+        }
+        System.out.println("Successfully Deleted Customer");
+        return true;
+    }
+    public static Customer getCustomerById(int customer_id) {
+        Customer customer = null;
+        try (Connection connection = connect()) {
+            Statement st = connection.createStatement();
+            st.execute("SELECT * FROM customer WHERE customer_id = " + customer_id);
+            ResultSet res = st.getResultSet();
+            while (res.next()) {
+                int id = res.getInt("customer_id");
+                String customer_name = res.getString("customer_name");
+                String address = res.getString("address");
+                String email = res.getString("email");
+                System.out.println("customer_id = " + customer_id + ", customer_name = " + customer_name + ", address = " + address
+                        + ", email = " + email);
+                customer = new Customer(id, customer_name, address, email);
+            }
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        return customer;
     }
 }

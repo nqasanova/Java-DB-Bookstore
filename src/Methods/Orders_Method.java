@@ -1,92 +1,97 @@
 package src.Methods;
-
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
+import src.Entity.Orders;
 import src.Connectivity.Database_Connection;
 
-public class Orders_Method {
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-    public static void displayTableStructure(String tableName) {
-        try (Connection connection = Database_Connection.connect()) {
-            if (connection != null) {
-                DatabaseMetaData metaData = connection.getMetaData();
-
-                // Get columns for the specified table
-                ResultSet columnResultSet = metaData.getColumns(null, null, tableName, null);
-                System.out.println("Table: " + tableName);
-                System.out.println("Columns:");
-                while (columnResultSet.next()) {
-                    String columnName = columnResultSet.getString("COLUMN_NAME");
-                    String columnType = columnResultSet.getString("TYPE_NAME");
-                    System.out.println("   " + columnName + " : " + columnType);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+public class Orders_Method extends Database_Connection {
+    public static boolean addOrders(Orders Orders) {
+        try (Connection connection = connect();) {
+            PreparedStatement st = connection.prepareStatement("INSERT INTO orders (order_id, customer_id,order_date,total_price) VALUES (?,?,?,?)");
+            st.setInt(1, Orders.getOrder_id());
+            st.setInt(2, Orders.getCustomer_id());
+            st.setDate(3, Orders.getOrder_date());
+            st.setInt(4, Orders.getTotal_price());
+            System.out.println("Inserting order");
+            st.execute();
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+            return false;
         }
+        return true;
     }
 
-    public static void displayPrimaryKeyInfo(String tableName) {
-        try (Connection connection = Database_Connection.connect()) {
-            if (connection != null) {
-                DatabaseMetaData metaData = connection.getMetaData();
-
-                // Get primary key columns for the specified table
-                ResultSet primaryKeyResultSet = metaData.getPrimaryKeys(null, null, tableName);
-                System.out.println("Table: " + tableName);
-                System.out.println("Primary Key Information:");
-                while (primaryKeyResultSet.next()) {
-                    String primaryKeyName = primaryKeyResultSet.getString("COLUMN_NAME");
-                    System.out.println("   Primary Key: " + primaryKeyName);
-                }
+    public static List<Orders> getAllOrders() {
+        List<Orders> Orders = new ArrayList<>();
+        try (Connection connection = connect()) {
+            Statement st = connection.createStatement();
+            st.execute("SELECT * FROM orders");
+            ResultSet res = st.getResultSet();
+            while (res.next()) {
+                int order_id = res.getInt("order_id");
+                int customer_id = res.getInt("customer_id");
+                Date order_date = res.getDate("order_date");
+                int total_price = res.getInt("total_price");
+                System.out.println("order_id = " + order_id + ", customer_id = " + customer_id +
+                        ", order_date = " + order_date + ", total_price = " + total_price);
+                Orders.add(new Orders(order_id, customer_id, order_date, total_price));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
         }
+        return Orders;
     }
 
-    public static void displayForeignKeyInfo(String tableName) {
-        try (Connection connection = Database_Connection.connect()) {
-            if (connection != null) {
-                DatabaseMetaData metaData = connection.getMetaData();
-
-                // Get foreign key columns for the specified table
-                ResultSet foreignKeyResultSet = metaData.getImportedKeys(null, null, tableName);
-
-                System.out.println("Table: " + tableName);
-                System.out.println("Foreign Key Information:");
-
-                if (foreignKeyResultSet.next()) {
-                    do {
-                        String foreignKeyName = foreignKeyResultSet.getString("FKCOLUMN_NAME");
-                        String referencedTableName = foreignKeyResultSet.getString("PKTABLE_NAME");
-                        String referencedColumnName = foreignKeyResultSet.getString("PKCOLUMN_NAME");
-                        System.out.println("   Foreign Key: " + foreignKeyName +
-                                ", Referenced Table: " + referencedTableName + ", Referenced Column: " + referencedColumnName);
-                    } while (foreignKeyResultSet.next());
-                } else {
-                    System.out.println("   No foreign keys found for the table.");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public static boolean updateOrders(Orders Orders) {
+        try (Connection connection = connect()) {
+            PreparedStatement st = connection.prepareStatement("UPDATE orders SET customer_id=?, order_date=?, total_price=? WHERE order_id=?");
+            st.setInt(1, Orders.getCustomer_id());
+            st.setDate(2, Orders.getOrder_date());
+            st.setInt(3, Orders.getTotal_price());
+            st.setInt(4, Orders.getOrder_id());
+            System.out.println("Updated successfully");
+            st.execute();
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+            return false;
         }
+        return true;
     }
 
-    public static void main(String[] args) {
-        // Specify the table name "orders"
-        String tableName = "orders";
+    public static boolean deleteOrders(int order_id) {
+        try (Connection connection = connect()) {
+            Statement st = connection.createStatement();
+            st.execute("DELETE FROM orders WHERE order_id = " + order_id);
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+            return false;
+        }
+        System.out.println("Successfully deleted order");
+        return true;
+    }
 
-        // Display structure of the specified table
-        displayTableStructure(tableName);
-
-        // Display primary key information for the specified table
-        displayPrimaryKeyInfo(tableName);
-
-        // Display foreign key information for the specified table
-        displayForeignKeyInfo(tableName);
+    public static Orders getOrderById(int order_id) {
+        Orders order = null;
+        try (Connection connection = connect()) {
+            Statement st = connection.createStatement();
+            st.execute("SELECT * FROM orders WHERE order_id = " + order_id);
+            ResultSet res = st.getResultSet();
+            while (res.next()) {
+                int id = res.getInt("order_id");
+                int customer_id = res.getInt("customer_id");
+                Date order_date = res.getDate("order_date");
+                int total_price = res.getInt("total_price");
+                System.out.println("order_id = " + id + ", customer_id = " + customer_id +
+                        ", order_date = " + order_date + ", total_price = " + total_price);
+                order = new Orders(id,customer_id,order_date,total_price);
+            }
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        return order;
     }
 }
