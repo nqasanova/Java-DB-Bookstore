@@ -8,11 +8,11 @@ This Java application demonstrates a comprehensive implementation of a bookstore
     - [Clone the Repository](#1-clone-the-repository)
     - [Open Project in Java IDE](#2-open-project-in-java-ide)
     - [Create PostgreSQL Database](#3-create-postgresql-database)
-  - [Usage](#usage)
+ - [Usage](#usage)
     - [Configure Database Connection](#4-configure-database-connection)
     - [Add PostgreSQL Driver](#5-add-postgresql-driver)
     - [Run the Application](#6-run-the-application)
-      - [Features](#features)
+- [Features](#features)
 
 ## Installation
 
